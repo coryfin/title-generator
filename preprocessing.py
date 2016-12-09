@@ -1,3 +1,6 @@
+from nltk.corpus import stopwords
+
+
 def load_stories(in_filename, num_stories):
     """
     Extracts stories and titles from a csv file
@@ -24,7 +27,7 @@ def load_stories(in_filename, num_stories):
     return ids, stories, titles
 
 
-def clean(story):
+def clean(story, remove_stop_words=False, remove_possessive=False):
     """
     Story pre-processing, such as removing punctuation, possessive 's, and de-capitalization.
     :param story: a string containing the story text
@@ -34,10 +37,15 @@ def clean(story):
     # Remove punctuation
     story = story.replace('.', '').replace('?', '').replace(',', '').replace('!', '')
 
-    # # TODO: remove possession?
-    # # Remove possession
-    # story = story.replace("'s", "")
+    # Remove possessive form
+    if remove_possessive:
+        story = story.replace("'s", "")
+
+    # Remove stop words
+    words = story.split(' ')
+    if remove_stop_words:
+        words = [word for word in words if word not in stopwords.words('english')]
 
     # Convert to lower case
-    story = ' '.join([word.lower() for word in story.split(' ')])
+    story = ' '.join([word.lower() for word in words])
     return story

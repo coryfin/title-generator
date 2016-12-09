@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import sys
-import math
 import preprocessing
 
 
@@ -120,7 +119,7 @@ class SemanticRelevance:
         :return:
         """
 
-        stories = [preprocessing.clean(row).split(' ') for row in stories]
+        stories = [preprocessing.clean(row, True, True).split(' ') for row in stories]
         sorted_vecs = []
 
         for story in stories:
@@ -129,54 +128,21 @@ class SemanticRelevance:
                 for j in range(len(story)):
                     if i != j:
                         relevance[i] += self.compute(story[i], story[j])
-            relevance, words = (list(t) for t in zip(*sorted(zip(relevance, story))))
-            sorted_vecs.append((list(reversed(words))[:cap], list(reversed(relevance))[:cap]))
+            vec = sorted(set(zip(relevance, story)), reverse=True)
+            sorted_vecs.append(vec[:cap])
+            # relevance, words = (list(t) for t in zip(*sorted(zip(relevance, story))))
+            # sorted_vecs.append(words[:cap], relevance[:cap])
 
-        return reversed(sorted_vecs)
-
-
-def format_stories(in_filename, num_stories):
-    """
-    Extracts stories and titles from a csv file
-    :param in_filename:
-    :param num_stories:
-    :return:
-    """
-    file = open(in_filename, 'r')
-    data = [row.strip().split('\t') for row in file]
-    file.close()
-
-    # Isolate header row
-    header = data[0]
-    data = data[1:num_stories + 1]
-
-    id_col = header.index('storyid')
-    title_col = header.index("storytitle")
-
-    # Separate ids and titles, and then join sentences of stories
-    titles = [row[title_col] for row in data]
-    ids = [row[id_col] for row in data]
-    stories = [' '.join(row[1:title_col] + row[title_col + 1:]) for row in data]
-
-    return ids, stories, titles
-
+        return sorted_vecs
 
 
 ont_filename = sys.argv[1]
 story_filename = sys.argv[2]
 
 semantic_relevance = SemanticRelevance(ont_filename)
-ids, stories, titles = format_stories(story_filename, 1)
+ids, stories, titles = preprocessing.load_stories(story_filename, 1)
 vectors = semantic_relevance.extract_vectors(stories, 10)
 for vector in vectors:
-    print(str(vector))
-
-# print(str(semantic_relevance.compute('beach', 'shore')))
-# print(str(semantic_relevance.compute('beach', 'sand')))
-# print(str(semantic_relevance.compute('beach', 'wave')))
-# print(str(semantic_relevance.compute('beach', 'beach')))
-# print(str(semantic_relevance.compute('wave', 'ocean')))
-# print(str(semantic_relevance.compute('dog', 'cat')))
-# print(str(semantic_relevance.compute('dog', 'pet')))
-# print(str(semantic_relevance.compute('dog', 'animal')))
-# print(str(semantic_relevance.compute('animal', 'human')))
+    rel, words = zip(*vector)
+    print(str(list(words)))
+    print(str(list(rel)))
