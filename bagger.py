@@ -1,52 +1,7 @@
-import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LinearRegression
 import sys
-
-
-def format_stories(in_filename, num_stories):
-    """
-    Extracts stories and titles from a csv file and prepares them to be represented as a bag of words.
-    :param in_filename:
-    :param num_stories:
-    :return:
-    """
-    file = open(in_filename, 'r')
-    data = [row.strip().split('\t') for row in file]
-    file.close()
-
-    # Isolate header row
-    header = data[0]
-    data = data[1:num_stories + 1]
-
-    id_col = header.index('storyid')
-    title_col = header.index("storytitle")
-
-    # Separate ids and titles, and then join sentences of stories
-    titles = [row[title_col] for row in data]
-    ids = [row[id_col] for row in data]
-    stories = [' '.join(row[1:title_col] + row[title_col + 1:]) for row in data]
-
-    return ids, stories, titles
-
-
-def clean(story):
-    """
-    Story prepocessing, such as removing punctuation, possessive 's, and de-capitalization.
-    :param story:
-    :return:
-    """
-
-    # Remove punctuation
-    story = story.replace('.', '').replace('?', '').replace(',', '').replace('!', '')
-
-    # # TODO: remove possession?
-    # # Remove possession
-    # story = story.replace("'s", "")
-
-    # Convert to lower case
-    story = ' '.join([word.lower() for word in story.split(' ')])
-    return story
+import preprocessing
 
 
 def bag(data, num_dimensions):
@@ -57,7 +12,7 @@ def bag(data, num_dimensions):
     :return:
     """
 
-    data = [clean(row) for row in data]
+    data = [preprocessing.clean(row) for row in data]
 
     # Initialize the "CountVectorizer" object, which is scikit-learn's
     # bag of words tool.
@@ -140,7 +95,7 @@ corpus_path = sys.argv[1]
 num_stories = int(sys.argv[2])
 num_dimensions = int(sys.argv[3])
 
-ids, stories, titles = format_stories(corpus_path, num_stories)
+ids, stories, titles = preprocessing.load_stories(corpus_path, num_stories)
 bagged_stories, story_feature_names = bag(stories, num_dimensions)
 bagged_titles, title_feature_names = bag(titles, num_dimensions)
 
