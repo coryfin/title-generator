@@ -111,7 +111,7 @@ def test(stories, titles, title_feature_names):
             if predicted_words[i] == actual_words[i]:
                 num_correct += 1
 
-    print(str(num_predicted) + ',' + str(num_correct))
+    print(str(len(train_features[0])) + ',' + str(len(train_targets[0])) + ',' + str(num_predicted) + ',' + str(num_correct))
     print('actual: ')
     for i in nonempty_predicted_ind:
         print('\t' + str(actual_words[i]))
