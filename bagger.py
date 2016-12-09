@@ -5,7 +5,12 @@ import sys
 
 
 def format_stories(in_filename, num_stories):
-
+    """
+    Extracts stories and titles from a csv file and prepares them to be represented as a bag of words.
+    :param in_filename:
+    :param num_stories:
+    :return:
+    """
     file = open(in_filename, 'r')
     data = [row.strip().split('\t') for row in file]
     file.close()
@@ -31,16 +36,14 @@ def clean(story):
     :param story:
     :return:
     """
-    # TODO: remove stop words?
 
     # Remove punctuation
     story = story.replace('.', '').replace('?', '').replace(',', '').replace('!', '')
 
-    # TODO: remove possession?
-    # Remove possession
-    story = story.replace("'s", "")
+    # # TODO: remove possession?
+    # # Remove possession
+    # story = story.replace("'s", "")
 
-    # TODO: capitalize names?
     # Convert to lower case
     story = ' '.join([word.lower() for word in story.split(' ')])
     return story
@@ -48,8 +51,9 @@ def clean(story):
 
 def bag(data, num_dimensions):
     """
-    Transforms a list of strings into a Bag of Words
+    Transforms a list of strings into a Bag of Words.
     :param data: a list of strings
+    :param num_dimensions:
     :return:
     """
 
@@ -75,7 +79,15 @@ def bag(data, num_dimensions):
 
     return train_data_features, vectorizer.get_feature_names()
 
+
 def test(stories, titles, title_feature_names):
+    """
+    Runs linear regression tests using Bag of Words model
+    :param stories:
+    :param titles:
+    :param title_feature_names:
+    :return:
+    """
 
     split = round(0.7 * len(stories))
     train_features = stories[:split]
@@ -105,6 +117,13 @@ def test(stories, titles, title_feature_names):
 
 
 def vec_to_words(vector, title_feature_names):
+    """
+    Converts a bag of words vector to a list of words
+    :param vector:
+    :param title_feature_names:
+    :return:
+    """
+
     rounded = [round(x) for x in vector]
     indices = list(filter(lambda x: rounded[x] >= 1, range(len(rounded))))
     words = []
