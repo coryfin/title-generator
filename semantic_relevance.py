@@ -5,6 +5,8 @@ class SemanticRelevance:
     def __init__(self, ontology_filename):
         self.ontology = Ontology(ontology_filename)
 
+        # Convert the ontology to an undirected graph, since semantic relevance cares only about distance, not direction
+
 
     def compute_relevance(self, a, b):
         """
