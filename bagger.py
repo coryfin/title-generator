@@ -112,8 +112,12 @@ def test(stories, titles, title_feature_names):
                 num_correct += 1
 
     print(str(num_predicted) + ',' + str(num_correct))
+    print('actual: ')
     for i in nonempty_predicted_ind:
-        print('actual: ' + str(actual_words[i]) + ', predicted: ' + str(predicted_words[i]))
+        print('\t' + str(actual_words[i]))
+    print('predicted: ')
+    for i in nonempty_predicted_ind:
+        print('\t' + str(predicted_words[i]))
 
 
 def vec_to_words(vector, title_feature_names):
