@@ -113,7 +113,7 @@ class SemanticRelevance:
 
     def extract_vectors(self, stories, cap):
         """
-        Extracts truncated semantic relevance vectors (top 10 most relevant words in order of relevance).
+        Extracts truncated semantic relevance vectors (top n most relevant words in order of relevance).
         :param stories:
         :param cap:
         :return:
@@ -128,10 +128,9 @@ class SemanticRelevance:
                 for j in range(len(story)):
                     if i != j:
                         relevance[i] += self.compute(story[i], story[j])
+            relevance = [round(x, 2) for x in relevance]
             vec = sorted(set(zip(relevance, story)), reverse=True)
             sorted_vecs.append(vec[:cap])
-            # relevance, words = (list(t) for t in zip(*sorted(zip(relevance, story))))
-            # sorted_vecs.append(words[:cap], relevance[:cap])
 
         return sorted_vecs
 
