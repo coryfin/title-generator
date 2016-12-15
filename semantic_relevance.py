@@ -139,9 +139,9 @@ ont_filename = sys.argv[1]
 story_filename = sys.argv[2]
 num_stories = int(sys.argv[3])
 
-semantic_relevance = SemanticRelevance(ont_filename)
-ids, stories, titles = preprocessing.load_stories(story_filename, num_stories)
-vectors = semantic_relevance.extract_vectors(stories, 5)
-for vector in vectors:
-    rel, words = zip(*vector)
-    print(str(list(words)) + ': ' + str(list(rel)))
+# semantic_relevance = SemanticRelevance(ont_filename)
+# ids, stories, titles = preprocessing.load_stories(story_filename, num_stories)
+# vectors = semantic_relevance.extract_vectors(stories, 5)
+# for vector in vectors:
+#     rel, words = zip(*vector)
+#     print(str(list(words)) + ': ' + str(list(rel)))

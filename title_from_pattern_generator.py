@@ -6,12 +6,13 @@ import nltk
 from nltk.corpus import wordnet as wn
 import itertools
 from collections import defaultdict
-import re
-
 import requests
-
 from bs4 import BeautifulSoup
-import argparse
+
+
+NUMBER_PATTERNS=15
+
+
 
 # parser = argparse.ArgumentParser(description='Get Google Count.')
 # parser.add_argument('word', help='word to count')
@@ -28,10 +29,6 @@ def get_number_of_google_searchs(word):
     s= soup.find('div',{'id':'resultStats'}).text
     newstr = s.replace(",", "")
     return int(''.join([s for s in newstr if s.isdigit()]))
-
-
-
-NUMBER_PATTERNS=30
 
 def nounify(verb_word):
     #for riding, it gives me rider instead of ride. Check.
@@ -125,7 +122,7 @@ def test(stories, titles):
     test_titles = titles[split + 1:]
     final_titles= []
 
-    title_patterns= pattern_analysis.patternTitles(train_titles)
+    title_patterns= pattern_analysis.patternTitles(titles)
 
     get_semantic_relevance = semantic_relevance.SemanticRelevance(ont_filename)
     semantic_relevance_stories= get_semantic_relevance.extract_vectors(train_stories[500:501], 5)

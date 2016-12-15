@@ -46,15 +46,22 @@ def getCumulativePercentage(title_patterns):
     locs, labels = plt.xticks()
     plt.setp(labels, rotation=90)
     plt.gcf().subplots_adjust(bottom=0.4)
-    plt.plot(x, percentages)
-    plt.title('Accumulative percentage of titles covered  by the top \n' + str(N_MOST_FREQUENT) + ' most frequent patterns in title' )
-    plt.plot(x, cs, 'r--')
+    line2, = plt.plot(x, percentages,label='Percentage per POS tag pattern over total tag patterns')
+    plt.title('Accumulative percentage of POS tag pattern in titles \n covered  by the top ' + str(N_MOST_FREQUENT) + ' most frequent POS tag patterns in title' )
+    line1, =plt.plot(x, cs, 'r--',label="Cumulative Percentage")
+
+
+    # Create a legend for the first line.
+    first_legend = plt.legend(handles=[line1], loc=1,fontsize=10)
+
+    # Add the legend manually to the current Axes.
+    ax = plt.gca().add_artist(first_legend)
+
+    # Create another legend for the second line.
+    plt.legend(handles=[line2], loc=4,fontsize=10)
+
     plt.show()
 
-# def learnCollocations(self,titles):
-#     for title in titles:
-#
-#
 
 
 
