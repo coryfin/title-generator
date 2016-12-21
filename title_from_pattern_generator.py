@@ -8,8 +8,7 @@ import itertools
 from collections import defaultdict
 import requests
 from bs4 import BeautifulSoup
-
-
+import testResults
 NUMBER_PATTERNS=15
 
 
@@ -125,11 +124,14 @@ def test(stories, titles):
     title_patterns= pattern_analysis.patternTitles(titles)
 
     get_semantic_relevance = semantic_relevance.SemanticRelevance(ont_filename)
-    semantic_relevance_stories= get_semantic_relevance.extract_vectors(train_stories[500:501], 5)
+    semantic_relevance_stories= get_semantic_relevance.extract_vectors(train_stories[500:503], 5)
+
+    testResults.test(semantic_relevance_stories, titles[500:503])
 
     for semantic_relevance_story in semantic_relevance_stories:
         final_titles.append(generateTitles(title_patterns,semantic_relevance_story))
 
+    #testResults
     # final_titles= generateTitles(title_patterns,['bike', 'she', 'sneak' , 'ride'])
 
     selected_titles=[]
